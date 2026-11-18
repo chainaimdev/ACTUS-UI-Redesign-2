@@ -117,6 +117,54 @@
   --destructive: #b91c1c;
 }
 
+/* Ocean Light: airy sea-blue on a cool off-white */
+[data-theme='ocean-light'] {
+  color-scheme: light;
+  --bg: #f4f9fb;
+  --surface: #e7f2f7;
+  --elevated: #ffffff;
+  --border-color: #cfe3eb;
+  --ink: #0b2a3a;
+  --ink-muted: #4a6676;
+  --grad-from: #0b4a6f;
+  --grad-via: #0284c7;
+  --grad-to: #38bdf8;
+  --accent-silver: #9cc4d6;
+  --brand-primary: #0369a1;
+  --on-brand: #ffffff;
+  --on-brand-hover: #ffffff;
+  --header-bg: rgb(244 249 251 / 0.88);
+  --footer-bg: #0b2f47;
+  --logo-inverted-mid: #bae6fd;
+  --shadow-rgb: 11 74 111;
+  --destructive: #b42318;
+  --text-gradient: linear-gradient(90deg, #0b4a6f 0%, #0b4a6f 40%, #0284c7 100%);
+}
+
+/* Ivory & Navy: warm ivory paper, deep navy ink, muted brass accent */
+[data-theme='ivory-navy'] {
+  color-scheme: light;
+  --bg: #fbf8f1;
+  --surface: #f3eee2;
+  --elevated: #fffdf8;
+  --border-color: #e3dccb;
+  --ink: #14213d;
+  --ink-muted: #5b6170;
+  --grad-from: #0f1d3a;
+  --grad-via: #1c2f5e;
+  --grad-to: #2f4a8a;
+  --accent-silver: #c9b88f;
+  --brand-primary: #1c2f5e;
+  --on-brand: #fffdf8;
+  --on-brand-hover: #fffdf8;
+  --header-bg: rgb(251 248 241 / 0.9);
+  --footer-bg: #0f1d3a;
+  --logo-inverted-mid: #e9dcb8;
+  --shadow-rgb: 20 33 61;
+  --destructive: #b42318;
+  --text-gradient: linear-gradient(90deg, #14213d 0%, #14213d 45%, #2f4a8a 100%);
+}
+
 /* ===== Colour palettes (the separate "Colors" dropdown) ===== */
 
 /* Sandpaper: warm paper, umber ink, terracotta accent, subtle grain */

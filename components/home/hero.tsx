@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import { ArrowRight } from 'lucide-react'
-import { HeroIllustration } from '@/components/home/hero-illustration'
+import { HeroVisual } from '@/components/home/hero-visual'
 import { hero } from '@/data/home'
 
 export function Hero() {
@@ -40,14 +40,7 @@ export function Hero() {
           </div>
         </div>
 
-        <figure className="animate-in fade-in zoom-in-95 duration-1000 motion-reduce:animate-none">
-          <HeroIllustration />
-          <figcaption className="mx-auto mt-4 flex max-w-xl items-center justify-center gap-2.5 text-center text-sm font-medium text-ink-muted md:text-base">
-            <span className="bg-brand-gradient h-px w-6 shrink-0 opacity-60" aria-hidden="true" />
-            {hero.illustrationCaption}
-            <span className="bg-brand-gradient h-px w-6 shrink-0 opacity-60" aria-hidden="true" />
-          </figcaption>
-        </figure>
+        <HeroVisual />
       </div>
     </section>
   )

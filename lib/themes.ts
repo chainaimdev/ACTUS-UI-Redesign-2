@@ -10,6 +10,7 @@
  *   black-gold  ← actus-black-gold-main     ("Carbon Black → Gunmetal with Gold")
  *   dark-blue   ← actus-bg-dark-blue-main   ("Midnight Navy → Electric Blue")
  *   graphite    ← actus-graphite-main       ("Graphite Oxblood")
+ *   ocean-light, ivory-navy  (added themes)
  *
  * Extra colour palettes (separate "Colors" dropdown, same layout):
  *   sandpaper, sage, harbor, plum
@@ -21,6 +22,8 @@ export type ThemeId =
   | 'black-gold'
   | 'dark-blue'
   | 'graphite'
+  | 'ocean-light'
+  | 'ivory-navy'
   // "Colors" dropdown — additional colour palettes on the same layout
   | 'sandpaper'
   | 'sage'
@@ -49,9 +52,8 @@ export type ThemeDefinition = {
 
 export const THEMES: readonly ThemeDefinition[] = [
   { id: 'white-blue', label: 'White & Blue (Default)', group: 'theme', colorScheme: 'light', themeColor: '#fbfcfd', swatch: ['#fbfcfd', '#002d56'] },
-  { id: 'black-gold', label: 'Black & Gold', group: 'theme', colorScheme: 'dark', themeColor: '#0a0a0a', swatch: ['#0a0a0a', '#d4af37'] },
-  { id: 'dark-blue', label: 'Dark Blue', group: 'theme', colorScheme: 'dark', themeColor: '#050b1a', swatch: ['#050b1a', '#22d3ee'] },
-  { id: 'graphite', label: 'Graphite', group: 'theme', colorScheme: 'light', themeColor: '#ffffff', swatch: ['#1c1c1e', '#9b1b30'] },
+  { id: 'ocean-light', label: 'Ocean Light', group: 'theme', colorScheme: 'light', themeColor: '#f4f9fb', swatch: ['#f4f9fb', '#0284c7'] },
+  { id: 'ivory-navy', label: 'Ivory & Navy', group: 'theme', colorScheme: 'light', themeColor: '#fbf8f1', swatch: ['#fbf8f1', '#14213d'] },
   { id: 'sandpaper', label: 'Sandpaper', group: 'palette', colorScheme: 'light', themeColor: '#f4ede1', swatch: ['#f4ede1', '#8c5530'] },
   { id: 'sage', label: 'Sage', group: 'palette', colorScheme: 'light', themeColor: '#f4f6f1', swatch: ['#f4f6f1', '#4a7458'] },
   { id: 'harbor', label: 'Harbor', group: 'palette', colorScheme: 'light', themeColor: '#f2f7f8', swatch: ['#f2f7f8', '#0f6e7e'] },

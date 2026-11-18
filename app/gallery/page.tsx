@@ -88,40 +88,6 @@ export default function GalleryPage() {
             <p className="mt-6 max-w-2xl text-lg leading-relaxed text-pretty text-white/70 md:text-xl">
               {galleryPage.description}
             </p>
-
-            {/* Jump links to each category */}
-            <nav aria-label="Gallery categories" className="mt-10">
-              <ul className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-                {sections.map((section) => {
-                  const Icon = categoryIcon[section.id];
-                  return (
-                    <li key={section.id}>
-                      <a
-                        href={`#${section.id}`}
-                        className="group flex items-center gap-3 rounded-2xl border border-white/10 bg-white/5 p-4 transition-all duration-300 hover:-translate-y-0.5 hover:border-white/25 hover:bg-white/10"
-                      >
-                        <span className="inline-flex size-10 shrink-0 items-center justify-center rounded-xl bg-white/10 text-[var(--gallery-accent)]">
-                          <Icon className="size-5" aria-hidden="true" />
-                        </span>
-                        <span className="min-w-0 flex-1">
-                          <span className="block font-semibold text-white">
-                            {section.label}
-                          </span>
-                          <span className="block text-sm text-white/60">
-                            {section.items.length}{" "}
-                            {section.items.length === 1 ? "item" : "items"}
-                          </span>
-                        </span>
-                        <ChevronRight
-                          className="size-4 text-white/40 transition-transform group-hover:translate-x-0.5 group-hover:text-white"
-                          aria-hidden="true"
-                        />
-                      </a>
-                    </li>
-                  );
-                })}
-              </ul>
-            </nav>
           </div>
         </RevealSection>
 

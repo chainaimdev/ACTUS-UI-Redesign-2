@@ -200,7 +200,7 @@ export function Gallery() {
       id="gallery"
       ref={sectionRef}
       aria-labelledby="gallery-heading"
-      className={cn('gallery-stage relative isolate scroll-mt-20 overflow-hidden py-16 text-white md:py-24', visible && 'is-visible')}
+      className={cn('gallery-stage relative isolate scroll-mt-20 overflow-hidden py-12 text-white md:py-16', visible && 'is-visible')}
     >
       <div aria-hidden="true" className="gallery-backdrop pointer-events-none absolute inset-0 -z-10" />
 
@@ -209,14 +209,14 @@ export function Gallery() {
           <p className="mb-3 text-sm font-semibold tracking-widest text-[var(--gallery-accent)] uppercase">
             {gallerySection.eyebrow}
           </p>
-          <h2 id="gallery-heading" className="text-4xl text-white md:text-5xl lg:text-6xl">
+          <h2 id="gallery-heading" className="text-3xl text-white md:text-4xl">
             {gallerySection.title}
           </h2>
           <div aria-hidden="true" className="gallery-rule mt-5 h-[3px] w-16 rounded-full" />
           <p className="mt-5 text-lg leading-relaxed text-pretty text-white/70">{gallerySection.description}</p>
         </div>
 
-        <ul className="mt-10 grid auto-rows-[240px] grid-cols-1 gap-4 sm:grid-cols-2 md:mt-14 lg:auto-rows-[230px] lg:grid-cols-3">
+        <ul className="mt-8 grid auto-rows-[200px] grid-cols-1 gap-4 sm:grid-cols-2 md:mt-8 lg:auto-rows-[170px] lg:grid-cols-3">
           {items.map((item, index) => {
             const primary = index === 0
             return (
@@ -231,7 +231,7 @@ export function Gallery() {
           })}
         </ul>
 
-        <div className="gallery-head mt-12 flex justify-center">
+        <div className="gallery-head mt-8 flex justify-center">
           <Link
             href={gallerySection.readMore.href}
             className="group inline-flex items-center gap-2 rounded-full bg-white px-7 py-3.5 text-sm font-semibold text-[var(--footer-bg)] shadow-[0_10px_30px_-12px_rgb(255_255_255/0.45)] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_16px_40px_-14px_rgb(255_255_255/0.6)]"

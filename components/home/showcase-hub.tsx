@@ -1,8 +1,8 @@
 'use client'
 
 import Link from 'next/link'
-import { useCallback, useEffect, useState } from 'react'
-import { ArrowRight, Pause, Play, Trophy } from 'lucide-react'
+import { useEffect, useRef, useState } from 'react'
+import { ArrowRight, Trophy } from 'lucide-react'
 import {
   Carousel,
   CarouselContent,
@@ -58,9 +58,9 @@ function WinnerCard({
   active: boolean
 }) {
   return (
-    <article className="relative isolate flex h-full flex-col overflow-hidden rounded-2xl border border-border bg-[var(--footer-bg)] shadow-[0_24px_48px_-28px_rgb(var(--shadow-rgb)/0.45)] lg:block lg:h-[540px]">
+    <article className="relative isolate flex h-full flex-col overflow-hidden rounded-2xl border border-border bg-[var(--footer-bg)] shadow-[0_24px_48px_-28px_rgb(var(--shadow-rgb)/0.45)] lg:block lg:h-[440px]">
       {/* Banner image: on top for phones/tablets, full-bleed behind the text on desktop */}
-      <div className="relative h-64 shrink-0 overflow-hidden sm:h-80 lg:absolute lg:inset-0 lg:-z-20 lg:h-auto">
+      <div className="relative h-48 shrink-0 overflow-hidden sm:h-64 lg:absolute lg:inset-0 lg:-z-20 lg:h-auto">
         <div
           className={cn(
             'h-full w-full transition-transform duration-[6000ms] ease-out motion-reduce:transition-none',
@@ -96,7 +96,7 @@ function WinnerCard({
           </span>
           <span className="text-sm text-white/70">{`Winner ${index + 1} of ${total}`}</span>
         </div>
-        <h3 className="mt-5 text-2xl text-white sm:text-3xl lg:text-4xl">{winner.project}</h3>
+        <h3 className="mt-5 text-2xl text-white sm:text-3xl lg:text-3xl">{winner.project}</h3>
         <p className="mt-2 text-lg font-semibold text-[var(--logo-inverted-mid)]">{winner.team}</p>
         <p className="mt-4 leading-relaxed text-white/80">{winner.summary}</p>
         <p className="mt-6 text-xs font-semibold tracking-widest text-white/55 uppercase">{winner.edition}</p>
@@ -129,7 +129,9 @@ function WinnersCarousel({
   const [snapCount, setSnapCount] = useState(0)
   const [playing, setPlaying] = useState(autoplay)
   const [hovered, setHovered] = useState(false)
-  const [focused, setFocused] = useState(false)
+  const [inView, setInView] = useState(false)
+  // Time left on the current slide. Kept across pauses so the countdown resumes instead of restarting.
+  const remainingRef = useRef(intervalMs)
 
   // Respect reduced-motion: start paused, the visitor can still press play.
   useEffect(() => {
@@ -151,31 +153,63 @@ function WinnersCarousel({
     }
   }, [api])
 
-  // Advance on a timer; pauses while hovered, focused, or the tab is hidden.
+  // Only run the timer while the carousel is actually on screen.
   useEffect(() => {
-    if (!api || !playing || hovered || focused) return
-    const id = window.setInterval(() => {
-      if (document.visibilityState !== 'visible') return
-      // Wrap to the first winner when looping isn't possible (few slides on wide screens).
-      if (api.canScrollNext()) api.scrollNext()
-      else api.scrollTo(0)
-    }, intervalMs)
-    return () => window.clearInterval(id)
-  }, [api, playing, hovered, focused, intervalMs])
+    if (!api) return
+    const observer = new IntersectionObserver(([entry]) => setInView(entry.isIntersecting), { threshold: 0.35 })
+    observer.observe(api.rootNode())
+    return () => observer.disconnect()
+  }, [api])
 
-  const togglePlay = useCallback(() => setPlaying((p) => !p), [])
+  // A new slide (automatic or clicked) starts with a full interval.
+  useEffect(() => {
+    remainingRef.current = intervalMs
+  }, [selected, intervalMs])
+
+  // Count down only while playing, on screen, not hovered and the tab is visible.
+  // Pausing saves the time left; resuming continues from it (no reset).
+  useEffect(() => {
+    if (!api || !playing || !inView || hovered) return
+    let timeoutId: number | undefined
+    let startedAt = 0
+
+    const start = () => {
+      startedAt = performance.now()
+      timeoutId = window.setTimeout(() => {
+        timeoutId = undefined
+        remainingRef.current = intervalMs
+        // Wrap to the first winner when looping isn't possible (few slides on wide screens).
+        if (api.canScrollNext()) api.scrollNext()
+        else api.scrollTo(0)
+        start()
+      }, remainingRef.current)
+    }
+    const stop = () => {
+      if (timeoutId === undefined) return
+      window.clearTimeout(timeoutId)
+      timeoutId = undefined
+      remainingRef.current = Math.max(0, remainingRef.current - (performance.now() - startedAt))
+    }
+    const onVisibility = () => (document.visibilityState === 'visible' ? start() : stop())
+
+    if (document.visibilityState === 'visible') start()
+    document.addEventListener('visibilitychange', onVisibility)
+    return () => {
+      document.removeEventListener('visibilitychange', onVisibility)
+      stop()
+    }
+  }, [api, playing, inView, hovered, intervalMs, selected])
 
   return (
     <Carousel
       setApi={setApi}
       opts={{ align: 'start', loop: true }}
       aria-label="Winners of ACTUS projects"
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
-      onFocusCapture={() => setFocused(true)}
-      onBlurCapture={(e) => {
-        if (!e.currentTarget.contains(e.relatedTarget as Node | null)) setFocused(false)
+      // Real mouse movement only: scrolling the page under a still cursor must not pause autoplay.
+      onPointerMove={(e) => {
+        if (e.pointerType === 'mouse' && !hovered) setHovered(true)
       }}
+      onMouseLeave={() => setHovered(false)}
     >
       <CarouselContent className="-ml-5 py-2" aria-live={playing ? 'off' : 'polite'}>
         {winnerItems.map((winner, index) => (
@@ -191,14 +225,6 @@ function WinnersCarousel({
 
       <div className="mt-8 flex items-center justify-between gap-4">
         <div className="flex items-center gap-3">
-          <button
-            type="button"
-            onClick={togglePlay}
-            aria-label={playing ? 'Pause automatic sliding' : 'Start automatic sliding'}
-            className="inline-flex size-11 items-center justify-center rounded-full border border-border text-ink transition-colors hover:border-brand hover:text-brand"
-          >
-            {playing ? <Pause className="size-4" aria-hidden="true" /> : <Play className="size-4" aria-hidden="true" />}
-          </button>
           <div className="flex items-center gap-2" role="group" aria-label="Choose slide">
             {Array.from({ length: snapCount }).map((_, i) => (
               <button

@@ -8,17 +8,20 @@
  *  - `href`:  link to the full post or event page. When empty, the card is not a link.
  */
 
-export type GalleryCategoryId = 'hackathons' | 'announcements' | 'winners' | 'upcoming'
+export type GalleryCategoryId = 'hackathons' | 'announcements' | 'community' | 'winners' | 'upcoming'
 
+/**
+ * Sections shown on the /gallery page, in this order. Categories not listed here
+ * ('winners', 'upcoming') are kept in the data but not shown.
+ */
 export const galleryCategories: { id: GalleryCategoryId; label: string; description: string }[] = [
-  { id: 'hackathons', label: 'Hackathons', description: 'Recaps and highlights from ACTUS hackathons.' },
   {
     id: 'announcements',
     label: 'Announcements',
-    description: 'News and updates about the ACTUS standard and its community.',
+    description: 'News and updates about the ACTUS standard.',
   },
-  { id: 'winners', label: 'Previous Winners', description: 'Teams and projects recognised at past ACTUS events.' },
-  { id: 'upcoming', label: 'Upcoming Events', description: 'What is coming up next across the ACTUS community.' },
+  { id: 'hackathons', label: 'Hackathon 2026', description: 'Recaps and highlights from the ACTUS Hackathon 2026.' },
+  { id: 'community', label: 'Community News', description: 'News from the ACTUS foundation and its members.' },
 ]
 
 export type GalleryItem = {
@@ -110,7 +113,7 @@ export const galleryItems: GalleryItem[] = [
   },
   {
     id: 'ann-2',
-    category: 'announcements',
+    category: 'community',
     title: 'Community news',
     description: 'News from the ACTUS foundation and its members.',
     meta: 'Announcement',

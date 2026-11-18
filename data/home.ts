@@ -50,6 +50,20 @@ export const hero = {
   illustrationCaption: 'From legal terms to cash flows, in one standard language.',
 }
 
+/**
+ * Hero picture options for the "View" dropdown above the hero illustration.
+ * The first entry is the default. Each has its own one-line caption.
+ */
+export const heroIllustrations = [
+  { id: 'cashflows', label: 'Contract to cash flows', caption: 'From legal terms to cash flows, in one standard language.' },
+  { id: 'types', label: 'Contract types', caption: 'One taxonomy for every contract, from loans to derivatives.' },
+  { id: 'events', label: 'Event timeline', caption: 'Every contract event, on one timeline, computed one way.' },
+  { id: 'scenarios', label: 'Risk scenarios', caption: 'Change the scenario, never the contract.' },
+  { id: 'ecosystem', label: 'Shared ecosystem', caption: 'Banks, regulators and ledgers, reading one contract.' },
+] as const
+
+export type HeroIllustrationId = (typeof heroIllustrations)[number]['id']
+
 export const whatIsSection = {
   eyebrow: 'Overview',
   title: 'What is ACTUS?',
