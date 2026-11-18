@@ -7,7 +7,7 @@ export function WhatIs() {
     <Section id="what-is-actus" {...whatIsSection} className="bg-surface">
       <div className="grid gap-6 md:grid-cols-2">
         {whatIsCards.map((card) => (
-          <FeatureCard key={card.title} card={card} />
+          <FeatureCard key={card.title} card={card} compact />
         ))}
       </div>
     </Section>

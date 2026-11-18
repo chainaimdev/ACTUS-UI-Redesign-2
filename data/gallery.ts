@@ -12,15 +12,15 @@ export type GalleryCategoryId = 'hackathons' | 'announcements' | 'community' | '
 
 /**
  * Sections shown on the /gallery page, in this order. Categories not listed here
- * ('winners', 'upcoming') are kept in the data but not shown.
+ * ('announcements', 'winners', 'upcoming') are kept in the data but not shown.
+ * Announcements now appear in the home-page Showcase box instead.
  */
 export const galleryCategories: { id: GalleryCategoryId; label: string; description: string }[] = [
   {
-    id: 'announcements',
-    label: 'Announcements',
-    description: 'News and updates about the ACTUS standard.',
+    id: 'hackathons',
+    label: 'Use Case Competition 2026',
+    description: 'Recaps and highlights from the ACTUS Use Case Competition 2026.',
   },
-  { id: 'hackathons', label: 'Hackathon 2026', description: 'Recaps and highlights from the ACTUS Hackathon 2026.' },
   { id: 'community', label: 'Community News', description: 'News from the ACTUS foundation and its members.' },
 ]
 
@@ -33,6 +33,10 @@ export type GalleryItem = {
   meta: string
   image: string
   href: string
+  /** Alt text for `image` (posters with text in them should describe it). */
+  imageAlt?: string
+  /** Square poster with text in it: shown whole beside the title instead of as a cropped background. */
+  poster?: boolean
   /** Layout hints for the "All" view: featured = 2×2 tile, wide = 2×1 tile. */
   featured?: boolean
   wide?: boolean
@@ -41,33 +45,69 @@ export type GalleryItem = {
 export const gallerySection = {
   eyebrow: 'Community',
   title: 'Gallery',
-  description: 'Hackathons, announcements, past winners and what is coming next across the ACTUS community.',
+  description: 'Use case competitions, past winners and what is coming next across the ACTUS community.',
   /** "Read more" button under the home-page gallery → dedicated gallery page. */
   readMore: { label: 'Read more', href: '/gallery' },
   /**
    * Items shown on the home page, in order. The first is the large primary card.
    * The /gallery page always shows every item.
    */
-  homeItemIds: ['ann-1', 'ann-2', 'hack-1'],
+  homeItemIds: ['hack-1', 'ann-2'],
 }
 
 /** Copy for the dedicated /gallery page. */
 export const galleryPage = {
   metaTitle: 'Gallery | ACTUS',
   metaDescription:
-    'Hackathons, announcements, previous winners and upcoming events from the ACTUS community.',
+    'Use case competitions, announcements, previous winners and upcoming events from the ACTUS community.',
   eyebrow: 'ACTUS Community',
   title: 'Gallery',
   description:
-    'Everything happening around the ACTUS standard in one place: hackathon highlights, announcements, the teams recognised at past events, and what is coming next.',
+    'Everything happening around the ACTUS standard in one place: use case competition highlights, announcements, the teams recognised at past events, and what is coming next.',
   backLabel: 'Go back to home page',
 }
+
+/* ---------- /gallery/showcase: the competition projects ---------- */
+
+export const showcasePage = {
+  metaTitle: 'Build sprint showcase | ACTUS',
+  metaDescription: 'All 16 projects presented in the ACTUS Algorithmic Financial Contracts Use Case Competition.',
+  eyebrow: 'Use Case Competition 2026',
+  title: 'Build sprint showcase',
+  description: 'All 16 projects presented in the ACTUS Algorithmic Financial Contracts Use Case Competition, in presentation order.',
+  backLabel: 'Back to Gallery',
+}
+
+/**
+ * Projects from the competition's solution-interview schedule: title and presenter only
+ * (recording links and passcodes are private and intentionally not included).
+ */
+export const showcaseProjects: { title: string; presenter: string }[] = [
+  { title: 'ACTUS-DRAPS: Dynamic Risk-Adaptive Portfolio Swaps for Supply Chain Finance', presenter: 'Christina Blessy' },
+  { title: 'Stress Testing UBS Bank: A Unified Approach to Financial Analysis', presenter: 'Thomas Meier' },
+  { title: 'An ACTUS-driven smart enterprise treasury', presenter: 'Anusha Rajesh' },
+  { title: 'Debt Algorand Standard Application', presenter: 'Cosimo' },
+  // Title as given in the schedule; it appears to be cut off at the start.
+  { title: '9 with High-Performance portfolio projections', presenter: 'Frans van Ek' },
+  { title: 'StableRisk AI: Deterministic ACTUS Simulations with AI-Driven Risk Factor Prediction for Proactive Stablecoin Reserve Management', presenter: 'Bala Murughan' },
+  { title: 'ACTUS Mentor: Natural Language Contract and Risk Modeling for deterministic cashflow with AI Tutoring', presenter: 'Nishanthi' },
+  // Spelled "Rodriquez" in the schedule; "Rodriguez" matches the official winner poster.
+  { title: 'JACTUS: Where Finance Meets Modern AI', presenter: 'Pedro Rodriguez' },
+  { title: 'Comprehensive, Standardized, Machine-Readable Contract Representation', presenter: 'Mark Flood' },
+  { title: 'FinanceVM: A Sovereign, Standard-Compliant Virtual Machine for Financial Asset Tokenisation', presenter: 'Jim Lin' },
+  { title: 'Risk Management in DeFi Through ACTUS-Based Liquidation Prediction and Hybrid Collateral Modeling', presenter: 'Harshanth Thangavel' },
+  { title: 'Generic No-Code ACTUS Transformer', presenter: 'Krimisha Deore' },
+  { title: 'Standardization of ESG Carbon Contracts and reporting Using ACTUS', presenter: 'Malarvizhi G' },
+  { title: 'ACTUS-Based Liquidity and Regulatory Risk Analytics Engine', presenter: 'Qiyuan Cong' },
+  { title: 'ContexQ: Graph AI for Enterprise Risk Intelligence & Financial Stability', presenter: 'Ajay Kararania / ContexQ' },
+  { title: 'ACTUS OnRamp: Simplifying Data Onboarding by Mapping Real-World Contract Data into ACTUS Standards', presenter: 'Neel Khot' },
+]
 
 export const galleryItems: GalleryItem[] = [
   {
     id: 'hack-1',
     category: 'hackathons',
-    title: 'ACTUS hackathon highlights',
+    title: 'ACTUS Use Case Competition highlights',
     description: 'Teams turning financial contracts into executable code with the ACTUS standard.',
     meta: 'Event recap',
     image: '',
@@ -77,7 +117,7 @@ export const galleryItems: GalleryItem[] = [
   {
     id: 'up-1',
     category: 'upcoming',
-    title: 'Next ACTUS hackathon',
+    title: 'Next ACTUS Use Case Competition',
     description: 'Registration details will be announced here.',
     meta: 'Date TBA',
     image: '',
@@ -87,10 +127,24 @@ export const galleryItems: GalleryItem[] = [
     id: 'win-1',
     category: 'winners',
     title: 'Winning team spotlight',
-    description: 'The top project from a past ACTUS hackathon.',
+    description: 'The top project from a past ACTUS Use Case Competition.',
     meta: 'Past edition',
     image: '',
     href: '',
+  },
+  {
+    id: 'ann-winners',
+    category: 'announcements',
+    title: 'Use Case Competition winners announced',
+    description:
+      'Results of the ACTUS Algorithmic Financial Contracts Use Case Competition, powered by apix. Where every contract speaks the same language.',
+    meta: 'Winners announcement',
+    image: '/gallery/competition-winners-announcement.jpg',
+    imageAlt:
+      'ACTUS Algorithmic Financial Contracts Use Case Competition: Winners Announcement poster, powered by apix',
+    // LinkedIn post: "Congratulations to the winners of ACTUS" (opens in a new tab)
+    href: 'https://lnkd.in/p/gU85yJkn',
+    poster: true,
   },
   {
     id: 'ann-1',
@@ -106,10 +160,10 @@ export const galleryItems: GalleryItem[] = [
     id: 'hack-2',
     category: 'hackathons',
     title: 'Build sprint showcase',
-    description: 'Prototypes built on ACTUS contract types.',
+    description: 'All 16 projects presented in the ACTUS Use Case Competition.',
     meta: 'Event recap',
     image: '',
-    href: '',
+    href: '/gallery/showcase',
   },
   {
     id: 'ann-2',

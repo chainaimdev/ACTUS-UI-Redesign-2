@@ -22,7 +22,6 @@ export type ShowcaseSectionCopy = {
 }
 
 export const useCasesSection: ShowcaseSectionCopy = {
-  eyebrow: 'In practice',
   title: 'ACTUS Use cases',
 }
 
@@ -33,7 +32,6 @@ export const useCaseItems: ShowcaseEntry[] = [
 ]
 
 export const projectsSection: ShowcaseSectionCopy = {
-  eyebrow: 'Community',
   title: 'ACTUS Projects',
 }
 
@@ -45,74 +43,95 @@ export const projectItems: ShowcaseEntry[] = [
 
 /* ---------- Winners carousel (inside the same box, below projects) ---------- */
 
+/** Announcements, shown at the top of the box. Items come from data/gallery.ts (category 'announcements', with an image). */
+export const announcementsSection: ShowcaseSectionCopy = {
+  title: 'Announcements',
+}
+
 export const winnersSection: ShowcaseSectionCopy = {
-  title: 'Winners of ACTUS projects',
+  title: 'Use Case Competition Winners',
+}
+
+export type WinnerGroup = {
+  /** Country or countries, as shown on the poster. */
+  country: string
+  /** Winner names, comma-separated. */
+  names: string
+  /** Competition track. */
+  track: string
 }
 
 export type WinnerEntry = {
   id: string
-  /** Mock dashboard banner drawn in the active theme's colours (see components/home/winner-banners.tsx). */
-  banner: 'loan' | 'bond' | 'registry' | 'risk'
-  /** Real banner image under /public (e.g. '/winners/team-alpha.jpg'). When set, it replaces the mock banner. */
-  image: string
-  /** Award line shown on the badge, e.g. "Winner · Lending". */
+  /** Rank label, e.g. "TOP 1". */
   award: string
-  project: string
-  team: string
-  summary: string
-  /** Event or edition the award came from. */
+  /** Square winner poster under /public. */
+  image: string
+  /** Alt text describing the poster. */
+  imageAlt: string
+  /** Winners on this poster (one or more groups). */
+  groups: WinnerGroup[]
+  /** Event the award came from. */
   edition: string
-  /** Optional link to the project; leave '' for no link. */
+  /** Optional link; leave '' for no link. */
   href: string
 }
 
+const EDITION = 'ACTUS Algorithmic Financial Contracts Use Case Competition'
+
 /**
- * SAMPLE DATA — fictional teams and projects for layout only.
- * Replace with the real winners before publishing.
+ * Winners of the ACTUS Algorithmic Financial Contracts Use Case Competition (powered by apix),
+ * transcribed from the official posters in ACTUS-Logos/HACK-img.
+ * Note: the source file names run opposite to the ranks ("Winner -3.jpeg" is TOP 1).
  */
 export const winnerItems: WinnerEntry[] = [
   {
-    id: 'winner-1',
-    banner: 'loan',
-    image: '',
-    award: 'Winner · Lending',
-    project: 'Loan cash-flow engine',
-    team: 'Team Alpha',
-    summary: 'Generates every payment of an amortising loan from its ACTUS contract terms.',
-    edition: 'ACTUS Hackathon (sample)',
+    id: 'top-1',
+    award: 'TOP 1',
+    image: '/winners/top-1.jpg',
+    imageAlt: 'TOP 1 winner poster: Pedro N Rodriguez Hernandez, Switzerland, ACTUS Enhancements & Education',
+    groups: [
+      { country: 'Switzerland', names: 'Pedro N Rodriguez Hernandez', track: 'ACTUS Enhancements & Education' },
+    ],
+    edition: EDITION,
     href: '',
   },
   {
-    id: 'winner-2',
-    banner: 'bond',
-    image: '',
-    award: 'Winner · Fixed income',
-    project: 'Bond analytics dashboard',
-    team: 'Team Beta',
-    summary: 'Projects coupons and principal for a bond portfolio in one consistent view.',
-    edition: 'ACTUS Hackathon (sample)',
+    id: 'top-2',
+    award: 'TOP 2',
+    image: '/winners/top-2.jpg',
+    imageAlt:
+      'TOP 2 winners poster: Cosimo Bassi, Italy, FinTech Innovation & Digital Assets; Nishanthini S, Harishmitha K, Kaviyaa N, Serin K Thomas and Dr. S. Thiliga, India, ACTUS Enhancements & Education',
+    groups: [
+      { country: 'Italy', names: 'Cosimo Bassi', track: 'FinTech Innovation & Digital Assets' },
+      {
+        country: 'India',
+        names: 'Nishanthini S, Harishmitha K, Kaviyaa N, Serin K Thomas, Dr. S. Thiliga',
+        track: 'ACTUS Enhancements & Education',
+      },
+    ],
+    edition: EDITION,
     href: '',
   },
   {
-    id: 'winner-3',
-    banner: 'registry',
-    image: '',
-    award: 'Winner · Digital assets',
-    project: 'Tokenised contract registry',
-    team: 'Team Gamma',
-    summary: 'Links on-chain assets to machine-readable ACTUS contract definitions.',
-    edition: 'ACTUS Hackathon (sample)',
-    href: '',
-  },
-  {
-    id: 'winner-4',
-    banner: 'risk',
-    image: '',
-    award: 'Winner · Risk',
-    project: 'Scenario risk simulator',
-    team: 'Team Delta',
-    summary: 'Stress-tests contract cash flows under interest-rate scenarios.',
-    edition: 'ACTUS Hackathon (sample)',
+    id: 'top-3',
+    award: 'TOP 3',
+    image: '/winners/top-3.jpg',
+    imageAlt:
+      'TOP 3 winners poster: Ajay Kumar Kakarania, Singapore, and Frans Van Ek, France, Risk Management & Financial Stability; Mark Flood, Elisa Kendall, Pete Rivett, Meng Weng Wong and Matt Wilson, USA, ACTUS Enhancements & Education',
+    groups: [
+      {
+        country: 'Singapore · France',
+        names: 'Ajay Kumar Kakarania, Frans Van Ek',
+        track: 'Risk Management & Financial Stability',
+      },
+      {
+        country: 'United States',
+        names: 'Mark Flood, Elisa Kendall, Pete Rivett, Meng Weng Wong, Matt Wilson',
+        track: 'ACTUS Enhancements & Education',
+      },
+    ],
+    edition: EDITION,
     href: '',
   },
 ]

@@ -135,7 +135,7 @@ export const tryPanels: FeatureCard[] = [
     description:
       'Understand where ACTUS adds value — from risk and treasury to regulatory reporting — and plan an adoption path that fits your existing systems and data.',
     icon: Workflow,
-    cta: { label: 'Read the adoption guide', href: '/standards/applicability' },
+    cta: { label: 'Read the adoption guide', href: 'https://documentation.actusfrf.org/docs/quickstart' },
   },
   {
     title: 'ACTUS Service Community Edition',
@@ -192,3 +192,9 @@ export const foundationInfo = {
   /** Footer copyright year: "© 2019 ACTUS Financial Research Foundation". */
   copyrightYear: '2019',
 }
+
+/** Foundation social profiles, shown at the end of the footer. Each opens in a new tab. */
+export const socialLinks = [
+  { id: 'linkedin', label: 'ACTUS Research on LinkedIn', href: 'https://www.linkedin.com/company/actus-research/' },
+  { id: 'x', label: 'ACTUS Research on X', href: 'https://x.com/ActusResearch' },
+] as const

@@ -16,8 +16,7 @@ export function sortPulse(items: PulseItem[]): PulseItem[] {
 export const pulseSection = {
   eyebrow: 'ACTUS Pulse',
   title: 'What the industry is saying',
-  description:
-    'Updates from regulators, central banks and the financial-standards community, selected by the ACTUS team.',
+  description: 'News Feed from ACTUS ecosystem curated by ACTUS foundation.',
   /** Number of cards on the home page. */
   homeCount: 3,
   empty: 'No updates published yet. Check back soon.',

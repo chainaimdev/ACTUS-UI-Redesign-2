@@ -131,7 +131,11 @@ export default function GalleryPage() {
                     {section.items.map((item, index) => (
                       <li
                         key={item.id}
-                        className="gallery-item"
+                        className={
+                          item.poster
+                            ? "gallery-item row-span-2 sm:row-span-1 md:col-span-2"
+                            : "gallery-item"
+                        }
                         style={{ "--i": index } as React.CSSProperties}
                       >
                         <GalleryCard item={item} large />

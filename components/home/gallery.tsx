@@ -14,10 +14,15 @@ import {
 } from '@/data/gallery'
 import { cn } from '@/lib/utils'
 
-const categoryLabel = Object.fromEntries(galleryCategories.map((c) => [c.id, c.label])) as Record<
-  GalleryCategoryId,
-  string
->
+/** Tag names for every category, including ones hidden from the /gallery page (e.g. Announcements). */
+const categoryLabel: Record<GalleryCategoryId, string> = {
+  announcements: 'Announcements',
+  hackathons: 'Use Case Competition 2026',
+  community: 'Community News',
+  winners: 'Previous Winners',
+  upcoming: 'Upcoming Events',
+  ...Object.fromEntries(galleryCategories.map((c) => [c.id, c.label])),
+}
 
 /* ---------- Generated ACTUS tile artwork (used when an item has no image) ---------- */
 
@@ -82,9 +87,72 @@ function TileArt({ seed }: { seed: string }) {
 
 /* ---------- Card ---------- */
 
+/** Links to other sites (e.g. LinkedIn posts) open in a new tab. */
+function isExternalUrl(href: string) {
+  return /^https?:\/\//i.test(href)
+}
+
 export function GalleryCard({ item, large }: { item: GalleryItem; large: boolean }) {
   const Icon = categoryIcon[item.category]
   const isUpcoming = item.category === 'upcoming'
+
+  // Poster layout: the whole square poster beside the title (nothing cropped or covered).
+  if (item.poster && item.image) {
+    const posterInner = (
+      <>
+        <div className="mx-auto aspect-square w-full max-w-[22rem] shrink-0 overflow-hidden sm:mx-0 sm:h-full sm:w-auto sm:max-w-none">
+          <img
+            src={item.image}
+            alt={item.imageAlt ?? ''}
+            className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.03]"
+            loading="lazy"
+          />
+        </div>
+        <div className="flex min-w-0 flex-1 flex-col justify-center p-5 md:p-7 lg:p-10">
+          <span className="hidden w-fit items-center gap-1.5 rounded-full border border-white/20 bg-black/25 px-2.5 py-1 text-xs font-medium text-white md:inline-flex">
+            <Icon className="size-3.5" aria-hidden="true" />
+            {categoryLabel[item.category]}
+          </span>
+          <p className="text-xs font-semibold tracking-wider text-white/70 uppercase md:mt-4 lg:mt-6">{item.meta}</p>
+          <h3 className="mt-2 font-heading text-xl font-bold tracking-tight text-balance text-white md:text-2xl lg:text-3xl">
+            {item.title}
+          </h3>
+          <p className="mt-3 line-clamp-2 max-w-md text-sm leading-relaxed text-white/75 md:line-clamp-3 lg:line-clamp-none lg:text-base">{item.description}</p>
+          {item.href && (
+            <span className="mt-5 inline-flex w-fit items-center gap-1.5 rounded-full bg-white px-4 py-2 text-sm font-semibold text-[var(--footer-bg)] transition-transform duration-300 group-hover:-translate-y-0.5">
+              View announcement
+              <ArrowUpRight className="size-4" aria-hidden="true" />
+            </span>
+          )}
+        </div>
+      </>
+    )
+    const posterClass =
+      'gallery-card group relative isolate flex h-full flex-col overflow-hidden rounded-2xl border border-white/10 shadow-[0_20px_40px_-24px_rgb(0_0_0/0.6)] transition-[transform,border-color] duration-500 hover:-translate-y-1 hover:border-white/25 sm:flex-row'
+    if (item.href && isExternalUrl(item.href)) {
+      return (
+        <a
+          href={item.href}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label={`${item.title} (opens in a new tab)`}
+          className={posterClass}
+          style={{ background: 'var(--gallery-card-bg)' }}
+        >
+          {posterInner}
+        </a>
+      )
+    }
+    return item.href ? (
+      <Link href={item.href} className={posterClass} style={{ background: 'var(--gallery-card-bg)' }}>
+        {posterInner}
+      </Link>
+    ) : (
+      <article className={posterClass} style={{ background: 'var(--gallery-card-bg)' }}>
+        {posterInner}
+      </article>
+    )
+  }
 
   const inner = (
     <>
@@ -194,6 +262,7 @@ export function Gallery() {
   const items = gallerySection.homeItemIds
     .map((id) => galleryItems.find((item) => item.id === id))
     .filter((item): item is GalleryItem => Boolean(item))
+  const twoUp = items.length === 2
 
   return (
     <section
@@ -216,16 +285,27 @@ export function Gallery() {
           <p className="mt-5 text-lg leading-relaxed text-pretty text-white/70">{gallerySection.description}</p>
         </div>
 
-        <ul className="mt-8 grid auto-rows-[200px] grid-cols-1 gap-4 sm:grid-cols-2 md:mt-8 lg:auto-rows-[170px] lg:grid-cols-3">
+        <ul
+          className={cn(
+            'mt-8 grid auto-rows-[200px] grid-cols-1 gap-4 sm:grid-cols-2 md:mt-8 lg:auto-rows-[170px]',
+            // Two cards: equal halves. Three or more: one large card plus smaller ones.
+            twoUp ? 'lg:grid-cols-2' : 'lg:grid-cols-3',
+          )}
+        >
           {items.map((item, index) => {
             const primary = index === 0
             return (
               <li
                 key={item.id}
                 style={{ '--i': index } as React.CSSProperties}
-                className={cn('gallery-item', primary && 'sm:col-span-2 sm:row-span-2 lg:col-span-2')}
+                className={cn(
+                  'gallery-item',
+                  twoUp ? 'sm:row-span-2' : primary && 'sm:col-span-2 sm:row-span-2 lg:col-span-2',
+                  // Phones stack the poster above its text, so give it room (3 rows) instead of cropping it.
+                  primary && item.poster && 'max-sm:row-span-3',
+                )}
               >
-                <GalleryCard item={item} large={primary} />
+                <GalleryCard item={item} large={twoUp || primary} />
               </li>
             )
           })}

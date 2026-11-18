@@ -4,11 +4,20 @@ import { IconBadge } from '@/components/section'
 import type { FeatureCard as FeatureCardData } from '@/data/home'
 import { cn } from '@/lib/utils'
 
-export function FeatureCard({ card, className }: { card: FeatureCardData; className?: string }) {
+export function FeatureCard({
+  card,
+  className,
+  compact = false,
+}: {
+  card: FeatureCardData
+  className?: string
+  /** Smaller padding, icon and title. Off by default, so other sections keep the full size. */
+  compact?: boolean
+}) {
   return (
-    <article className={cn('card-brand flex h-full flex-col p-7 md:p-9', className)}>
-      <IconBadge icon={card.icon} size="lg" />
-      <h3 className="mt-6 text-2xl">{card.title}</h3>
+    <article className={cn('card-brand flex h-full flex-col', compact ? 'p-6 md:p-7' : 'p-7 md:p-9', className)}>
+      <IconBadge icon={card.icon} size={compact ? 'md' : 'lg'} />
+      <h3 className={compact ? 'mt-4 text-xl' : 'mt-6 text-2xl'}>{card.title}</h3>
       <p className="mt-3 flex-1 leading-relaxed text-ink-muted">{card.description}</p>
       <Link
         href={card.cta.href}
